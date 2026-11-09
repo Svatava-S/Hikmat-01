@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabian Nights Tobacco & Perfumery | Gqeberha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #121318;
+            --bg-card: #181a20;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #f3e5ab;
+            --accent-gold-dark: #aa8c2c;
+            --text-main: #f4f4f6;
+            --text-muted: #9ba1a6;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Age Verification Modal */
+        #age-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 5, 7, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-gold);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+
+        .modal-content h2 {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+
+        .modal-content p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+            color: var(--bg-primary);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-main);
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-main);
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 12, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-gold);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* Views System */
+        .view-section {
+            display: none;
+            padding-top: 120px;
+            min-height: 100vh;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(10,10,12,0.6), rgba(10,10,12,0.9)), radial-gradient(circle at center, rgba(212,175,55,0.15) 0%, transparent 70%);
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto 35px;
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.3rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .card-img-placeholder {
+            height: 200px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-img-placeholder i {
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .card-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .card-content h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .card-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border-color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px 10px 40px;
+            border-radius: 25px;
+            color: var(--text-main);
+            outline: none;
+            width: 250px;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-gold);
+            width: 280px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Cart Drawer */
+        #cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            z-index: 2000;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        #cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cart-header h3 {
+            color: var(--accent-gold);
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .cart-footer {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+        }
+
+        /* Location Info */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-card h3 {
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .info-item i {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            margin-top: 4px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            margin-top: 80px;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        @media(max-width: 768px) {
+            nav ul { display: none; }
+            #cart-drawer { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Age Verification Modal -->
+    <div id="age-modal">
+        <div class="modal-content">
+            <h2 class="brand-font">Age Verification Required</h2>
+            <p>You must be 18 years or older to enter Arabian Nights Tobacco & Perfumery[cite: 1, 2]. Please verify your age.</p>
+            <div class="modal-btns">
+                <button class="btn-gold" onclick="verifyAge(true)">I am 18 or Older</button>
+                <button class="btn-outline" onclick="verifyAge(false)">Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a class="logo brand-font" onclick="switchView('home')">ARABIAN NIGHTS</a>
+        <nav>
+            <ul>
+                <li><a onclick="switchView('home')" class="nav-link active" data-view="home">Home</a></li>
+                <li><a onclick="switchView('catalog')" class="nav-link" data-view="catalog">Store Catalog</a></li>
+                <li><a onclick="switchView('fragrances')" class="nav-link" data-view="fragrances">Fragrance Section</a></li>
+                <li><a onclick="switchView('hookah')" class="nav-link" data-view="hookah">Hookah & Shisha</a></li>
+                <li><a onclick="switchView('contact')" class="nav-link" data-view="contact">Location & Contact</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HOME VIEW -->
+    <section id="home" class="view-section active">
+        <div class="hero">
+            <div>
+                <h1 class="brand-font">Arabian Nights Tobacco & Perfumery</h1>
+                <p>Gqeberha's premier boutique destination offering exquisite Middle Eastern perfumes, premium tobaccos, artisanal hookahs, vapes, cigars, and wellness essentials[cite: 1, 2].</p>
+                <button class="btn-gold" onclick="switchView('catalog')">Explore Collection</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="section-title">
+                <h2 class="brand-font">Our Core Offerings</h2>
+                <p>Curated luxury and premium quality goods[cite: 2]</p>
+            </div>
+
+            <div class="grid-4">
+                <div class="card" onclick="switchView('catalog')">
+                    <div class="card-img-placeholder">
+                        <div><i class="fa-solid fa-spray-can-sparkles"></i>[Fragrance Image Placeholder]</div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="brand-font">Fragrance Section</h3>
+                            <p>Arabic and Middle Eastern perfumes, designer-inspired scents, scented lotions, room sprays, candles, and wax melts[cite: 2].</p>
+                        </div>
+                        <span class="price">From R250</span>
+                    </div>
+                </div>
+
+                <div class="card" onclick="switchView('catalog')">
+                    <div class="card-img-placeholder">
+                        <div><i class="fa-solid fa-smoking"></i>[Hookah Image Placeholder]</div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="brand-font">Hookah & Shisha</h3>
+                            <p>Artisanal hookah pipes, premium flavours, charcoal, specialized hoses, and full shisha accessories[cite: 2].</p>
+                        </div>
+                        <span class="price">From R180</span>
+                    </div>
+                </div>
+
+                <div class="card" onclick="switchView('catalog')">
+                    <div class="card-img-placeholder">
+                        <div><i class="fa-solid fa-bolt"></i>[Vapes Image Placeholder]</div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="brand-font">Vapes & Devices</h3>
+                            <p>Cigarettes, disposable vapes, e-liquids, advanced mod devices, and nicotine salt juices[cite: 2].</p>
+                        </div>
+                        <span class="price">From R120</span>
+                    </div>
+                </div>
+
+                <div class="card" onclick="switchView('catalog')">
+                    <div class="card-img-placeholder">
+                        <div><i class="fa-solid fa-leaf"></i>[CBD & Cigar Placeholder]</div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="brand-font">Cigars & CBD Wellness</h3>
+                            <p>Hand-rolled cigars like Joya de Nicaragua selections alongside specialized CBD products and tools[cite: 2, 10].</p>
+                        </div>
+                        <span class="price">From R350</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATALOG VIEW -->
+    <section id="catalog" class="view-section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="brand-font">Complete Store Catalog</h2>
+                <p>Browse our elite inventory available at 324 Kragga Kamma Road, Lorraine[cite: 1, 2]</p>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-btns">
+                    <button class="filter-btn active" onclick="filterProducts('all', this)">All Products</button>
+                    <button class="filter-btn" onclick="filterProducts('fragrance', this)">Fragrance Section</button>
+                    <button class="filter-btn" onclick="filterProducts('hookah', this)">Hookah & Shisha</button>
+                    <button class="filter-btn" onclick="filterProducts('vape', this)">Vapes & Devices</button>
+                    <button class="filter-btn" onclick="filterProducts('cigar', this)">Cigars & Tobacco</button>
+                    <button class="filter-btn" onclick="filterProducts('cbd', this)">CBD & Tools</button>
+                </div>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Search catalog..." onkeyup="searchProducts()">
+                </div>
+            </div>
+
+            <div class="grid-4" id="product-grid"></div>
+        </div>
+    </section>
+
+    <!-- FRAGRANCES VIEW -->
+    <section id="fragrances" class="view-section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="brand-font">The Fragrance Section</h2>
+                <p>Immersive Arabian oils, designer-inspired scents, scented lotions, and home aromas[cite: 2]</p>
+            </div>
+            <div class="grid-4" id="fragrance-grid"></div>
+        </div>
+    </section>
+
+    <!-- HOOKAH VIEW -->
+    <section id="hookah" class="view-section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="brand-font">Hookah Pipes & Flavours</h2>
+                <p>Traditional craftsmanship meets modern smoking pleasure[cite: 2]</p>
+            </div>
+            <div class="grid-4" id="hookah-grid"></div>
+        </div>
+    </section>
+
+    <!-- CONTACT & LOCATION VIEW -->
+    <section id="contact" class="view-section">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="brand-font">Visit Our Store</h2>
+                <p>Experience luxury in person at Gqeberha, Eastern Cape[cite: 1, 2]</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3 class="brand-font">Store Information</h3>
+                    <div class="info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <strong>Address:</strong><br>
+                            324 Kragga Kamma Road, Lorraine, Gqeberha, 6070[cite: 1]
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <strong>Phone / Enquiries:</strong><br>
+                            +27 67 632 0511[cite: 1]
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <div>
+                            <strong>Trading Hours:</strong><br>
+                            Monday – Saturday: 09:00 – 18:00[cite: 1]<br>
+                            Sunday: Closed[cite: 1]
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3 class="brand-font">Direct Inquiry</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Looking for specific stock availability or custom orders? Reach out directly.</p>
+                    <form onsubmit="handleContact(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" placeholder="Your Name" required style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 12px; border-radius: 6px; color: var(--text-main); outline: none;">
+                        <input type="tel" placeholder="Phone Number" required style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 12px; border-radius: 6px; color: var(--text-main); outline: none;">
+                        <textarea placeholder="Message / Product Request" rows="4" required style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 12px; border-radius: 6px; color: var(--text-main); outline: none;"></textarea>
+                        <button type="submit" class="btn-gold">Send Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Drawer -->
+    <div id="cart-drawer">
+        <div class="cart-header">
+            <h3 class="brand-font">Your Cart</h3>
+            <button class="close-cart" onclick="toggleCart()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <p style="color: var(--text-muted); text-align: center; margin-top: 40px;">Your cart is currently empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">R0.00</span>
+            </div>
+            <button class="btn-gold" style="width: 100%;" onclick="alert('Checkout simulated successfully! Visit us at 324 Kragga Kamma Rd to complete your purchase.')">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="brand-font" style="color: var(--accent-gold); font-size: 1.2rem; margin-bottom: 15px;">ARABIAN NIGHTS TOBACCO & PERFUMERY</p>
+        <p>324 Kragga Kamma Road, Lorraine, Gqeberha, 6070[cite: 1] | Phone: +27 67 632 0511[cite: 1]</p>
+        <p>&copy; 2026 Arabian Nights Tobacco & Perfumery. All rights reserved. Strictly 18+[cite: 1, 2].</p>
+    </footer>
+
+    <script>
+        // Product Database
+        const products = [
+            { id: 1, name: "Oud Al Malik Luxury Parfum", category: "fragrance", price: 650, icon: "fa-spray-can-sparkles", desc: "Rich Middle Eastern fragrance notes with deep amber and woody undertones[cite: 2]." },
+            { id: 2, name: "Designer-Inspired Scented Lotion", category: "fragrance", price: 320, icon: "fa-pump-soap", desc: "Luxurious moisturizing body lotion with long-lasting aromatic profiles[cite: 2]." },
+            { id: 3, name: "Room Spray & Wax Melt Set", category: "fragrance", price: 280, icon: "fa-candles", desc: "Transform your living space with oriental luxury aromas and wax melts[cite: 2]." },
+            { id: 4, name: "Traditional Brass Hookah Pipe", category: "hookah", price: 1250, icon: "fa-smoking", desc: "Handcrafted golden finish shisha pipe with silicone hose and base." },
+            { id: 5, name: "Premium Shisha Flavours (250g)", category: "hookah", price: 180, icon: "fa-cloud", desc: "Assorted top-grade fruit and mint molasses blends for hookah[cite: 2]." },
+            { id: 6, name: "Hookah Charcoal & Tool Kit", category: "hookah", price: 150, icon: "fa-fire", desc: "Quick-light coconut charcoal, tongs, and professional heat management tools." },
+            { id: 7, name: "Advanced Vape Mod Device", category: "vape", price: 890, icon: "fa-bolt", desc: "High-performance variable wattage vaping hardware kit." },
+            { id: 8, name: "Salt Nic E-Liquid & Juice (30ml)", category: "vape", price: 220, icon: "fa-droplet", desc: "Smooth e-juice hit with vibrant fruit and ice flavor profiles[cite: 2]." },
+            { id: 9, name: "Disposable Vapes & Pods", category: "vape", price: 160, icon: "fa-wand-magic-sparkles", desc: "Convenient long-lasting flavored puff devices and pods." },
+            { id: 10, name: "Cigarettes Carton Selection", category: "cigar", price: 550, icon: "fa-box", desc: "Assorted premium cigarette brands available in-store[cite: 2]." },
+            { id: 11, name: "Joya de Nicaragua Selección Robusto", category: "cigar", price: 350, icon: "fa-scroll", desc: "Exquisite box of curated premium handmade cigars[cite: 10]." },
+            { id: 12, name: "CBD Wellness Oil & Drops", category: "cbd", price: 450, icon: "fa-leaf", desc: "Pure hemp extract CBD products for daily balance and relaxation[cite: 2]." },
+            { id: 13, name: "CBD Tools & Acrylic Bongs", category: "cbd", price: 380, icon: "fa-bong", desc: "High-grade durable smoking accessories and tools for CBD use." }
+        ];
+
+        let cart = [];
+
+        // Age Verification
+        function verifyAge(isOfAge) {
+            if (isOfAge) {
+                document.getElementById('age-modal').style.display = 'none';
+            } else {
+                alert('Access restricted to visitors 18 years or older.');
+                window.location.reload();
+            }
+        }
+
+        // View Router
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(viewId).classList.add('active');
+            const activeNav = document.querySelector(`[data-view="${viewId}"]`);
+            if (activeNav) activeNav.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Products
+        function renderProducts(itemsToRender, containerId = 'product-grid') {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            if (itemsToRender.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center;">No products found.</p>`;
+                return;
+            }
+
+            container.innerHTML = itemsToRender.map(p => `
+                <div class="card">
+                    <div class="card-img-placeholder">
+                        <div><i class="fa-solid ${p.icon}"></i>[Product Image Placeholder]</div>
+                    </div>
+                    <div class="card-content">
+                        <div>
+                            <h3 class="brand-font">${p.name}</h3>
+                            <p>${p.desc}</p>
+                        </div>
+                        <div>
+                            <span class="price">R${p.price}.00</span>
+                            <button class="btn-gold" style="width: 100%; padding: 8px;" onclick="addToCart(${p.id})">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Products
+        function filterProducts(category, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        // Search Products
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // Cart Functionality
+        function toggleCart() {
+            document.getElementById('cart-drawer').classList.toggle('open');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCartUI();
+            toggleCart();
+        }
+
+        function updateCartUI() {
+            const countEl = document.getElementById('cart-count');
+            const itemsContainer = document.getElementById('cart-items-container');
+            const totalEl = document.getElementById('cart-total-price');
+
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            countEl.innerText = totalCount;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; margin-top: 40px;">Your cart is currently empty.</p>`;
+                totalEl.innerText = 'R0.00';
+                return;
+            }
+
+            let totalPrice = 0;
+            itemsContainer.innerHTML = cart.map(item => {
+                totalPrice += item.price * item.qty;
+                return `
+                    <div class="cart-item">
+                        <div>
+                            <strong style="font-size: 0.95rem;">${item.name}</strong><br>
+                            <span style="color: var(--accent-gold); font-size: 0.85rem;">R${item.price} x ${item.qty}</span>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" style="background: none; border: none; color: #ff5c5c; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            }).join('');
+
+            totalEl.innerText = `R${totalPrice}.00`;
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function handleContact(e) {
+            e.preventDefault();
+            alert('Thank you for your enquiry. Our team at 324 Kragga Kamma Road will get back to you shortly!');
+            e.target.reset();
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            renderProducts(products);
+            renderProducts(products.filter(p => p.category === 'fragrance'), 'fragrance-grid');
+            renderProducts(products.filter(p => p.category === 'hookah'), 'hookah-grid');
+        };
+    </script>
+</body>
+</html>
